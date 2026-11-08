@@ -19,21 +19,25 @@ class Controller:
 
     def popola_dropdowns(self):
         """ Popola i controlli Dropdown della View richiedendo i dati al Model. """
-
-        # 1. Popola Dropdown Biblioteche
+        # Recupero i dati
         biblioteche = self._model.get_biblioteche()
-        # Aggiungo l'opzione di default per il "Nessun filtro"
-        self._view.dd_biblioteca.options.append(ft.dropdown.Option(key="None", text="Nessun filtro"))
-        for b in biblioteche:
-            # Uso l'id come chiave logica e il nome come testo visibile
-            self._view.dd_biblioteca.options.append(ft.dropdown.Option(key=str(b.id), text=b.nome))
-
-        # 2. Popola Dropdown Generi
         generi = self._model.get_generi()
-        self._view.dd_genere.options.append(ft.dropdown.Option(key="None", text="Nessun filtro"))
-        for g in generi:
-            self._view.dd_genere.options.append(ft.dropdown.Option(key=g, text=g))
 
+        # 1. Ricostruisco la lista biblioteche da zero
+        opz_biblio = [ft.dropdown.Option(key="None", text="Nessun filtro")]
+        for b in biblioteche:
+            opz_biblio.append(ft.dropdown.Option(key=str(b.id), text=b.nome))
+
+        # 2. Ricostruisco la lista generi da zero
+        opz_generi = [ft.dropdown.Option(key="None", text="Nessun filtro")]
+        for g in generi:
+            opz_generi.append(ft.dropdown.Option(key=g, text=g))
+
+        # Assegno le liste complete ai Dropdown
+        self._view.dd_biblioteca.options = opz_biblio
+        self._view.dd_genere.options = opz_generi
+
+        # Aggiorno l'interfaccia
         self._view.update()
 
     def handle_biblioteca_select(self, e):
